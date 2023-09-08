@@ -45,7 +45,7 @@
                         <label for="Category">Categoría</label>
                     </label>
                 </div>
-                <div class="col-8">
+                <div class="col-8 mt-2">
                     @Html.DropDownListFor(m => m.Article.CategoriaId, Model.ListArticles, "-Por favor seleccione una categoría-",
                     new {@class = "form-control"})
                 </div>

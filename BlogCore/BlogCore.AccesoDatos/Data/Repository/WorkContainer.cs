@@ -11,9 +11,12 @@ namespace BlogCore.AccesoDatos.Data.Repository
         {
             _context = context;
             categoryRepository = new CategoryRepository(_context);
+            articleRepository = new ArticleRepository(_context);    
         }
 
         public ICategoryRepository categoryRepository { get; private set; }
+
+        public IArticleRepository articleRepository { get; private set; }
 
         public void Dispose()
         {

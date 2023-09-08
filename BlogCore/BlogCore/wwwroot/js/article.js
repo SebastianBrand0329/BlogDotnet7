@@ -6,25 +6,26 @@ $(document).ready(function () {
 
 
 function LoadDatatable() {
-    dataTable = $("#tblCategory").DataTable({
+    dataTable = $("#tblArticle").DataTable({
         "ajax": {
-            "url": "/Admin/Categorys/GetAll",
+            "url": "/Admin/Articles/GetAll",
             "type": "GET",
             "datatype": "json"
         },
         "columns": [
-            { "data": "id", "width": "5%" }, // Utiliza "Id" en lugar de "id"
-            { "data": "name", "width": "30%" }, // Utiliza "Name" en lugar de "name"
-            { "data": "order", "width": "20%" }, // Utiliza "Order" en lugar de "order"
+            { "data": "id", "width": "5%" }, 
+            { "data": "name", "width": "25%" }, 
+            { "data": "category", "width": "15%" },
+            { "data": "dateCreation", "width": "15%" }, 
             {
-                "data": "id", // Utiliza "Id" en lugar de "id"
+                "data": "id",
                 "render": function (data) {
                     return `<div class="text-center">
-                            <a href="/Admin/Categorys/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer; width:150px;">
+                            <a href="/Admin/Articles/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer; width:150px;">
                             <i class="far fa-edit"></i>Editar
                             </a>
                             &nbsp;
-                            <a onclick=deleteCategory("/Admin/Categorys/DeleteCategory/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:150px;">
+                            <a onclick=deleteArticle("/Admin/Articles/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:150px;">
                             <i class="far fa-trash-alt"></i>Borrar
                             </a>
                         </div>
@@ -56,7 +57,7 @@ function LoadDatatable() {
     });
 }
 
-function deleteCategory(url) {
+function deleteArticle(url) {
     swal({
         title: "Esta seguro de borrar?",
         text: "Este contenido no se puede recuperar!",

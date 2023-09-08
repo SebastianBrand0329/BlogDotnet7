@@ -59,6 +59,20 @@ namespace BlogCore.Areas.Admin.Controllers
         }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                _workContainer.categoryRepository.Update(category);
+                _workContainer.Save();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(category);
+        }
+
 
 
 
@@ -74,6 +88,20 @@ namespace BlogCore.Areas.Admin.Controllers
             return Json(new {data = _workContainer.categoryRepository.GetAll()});
         }
 
+        [HttpDelete]
+        public IActionResult DeleteCategory(int id)
+        {
+            var category = _workContainer.categoryRepository.Get(id);
+
+            if (category == null)
+            {
+                return Json(new { success = false, message = "Error borrando categoría" });
+            }
+
+            _workContainer.categoryRepository.Remove(category);
+            _workContainer.Save();
+            return Json(new { success = true, message = "Categoría eliminada correctamente" });
+        }
 
         #endregion
     }

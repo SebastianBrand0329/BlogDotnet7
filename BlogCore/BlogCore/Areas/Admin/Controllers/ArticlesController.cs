@@ -10,12 +10,12 @@ namespace BlogCore.Areas.Admin.Controllers
     public class ArticlesController : Controller
     {
         private readonly IWorkContainer _workContainer;
-        private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ArticlesController(IWorkContainer workContainer, ApplicationDbContext context)
+        public ArticlesController(IWorkContainer workContainer, IWebHostEnvironment webHostEnvironment)
         {
             _workContainer = workContainer;
-            _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -36,13 +36,43 @@ namespace BlogCore.Areas.Admin.Controllers
             return View(articleVM); 
         }
 
+        //[HttpPost]
+        //public IActionResult Create(Article article)
+        //{
+        //    return View();
+        //}
+
         [HttpPost]
-        public IActionResult Create(Article article)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(ArticleVM articleVM)
         {
-            return View();
+            if (ModelState.IsValid) 
+            {
+                string routeMain = _webHostEnvironment.WebRootPath;
+                var files = HttpContext.Request.Form.Files;
+
+                if(articleVM.Article.Id == 0)
+                {
+                    // Create New Article
+                    string fileName = Guid.NewGuid().ToString();
+                    var load = Path.Combine(routeMain, @"Images\articles");   
+                    var extension = Path.GetExtension(files[0].FileName);
+
+                    using (var filesStreams = new FileStream(Path.Combine(load, fileName + extension), FileMode.Create))
+                    {
+                        files[0].CopyTo(filesStreams);
+                    }
+                    articleVM.Article.UrlImage = @"\Images\articles\" + fileName + extension;
+                    articleVM.Article.DateCreation = DateTime.Now.ToString();
+                    _workContainer.articleRepository.Add(articleVM.Article);
+                    _workContainer.Save();
+
+                    return RedirectToAction(nameof(Index));   
+                }
+            }
+            articleVM.ListArticles = _workContainer.categoryRepository.GetListCategory();
+            return View(articleVM);
         }
-
-
 
 
 

@@ -1,6 +1,5 @@
 ﻿using BlogCore.Data;
 using BlogCore.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BlogCore.AccesoDatos.Data.Repository
 {
@@ -14,11 +13,12 @@ namespace BlogCore.AccesoDatos.Data.Repository
         }
         public void Update(Article article)
         {
-             var obj = _context.Articles.FirstOrDefault(a => a.Id == article.Id)!;
+            var obj = _context.Articles.FirstOrDefault(a => a.Id == article.Id)!;
             obj.Name = article.Name;
             obj.Description = article.Description;
             obj.UrlImage = article.UrlImage;
             obj.DateCreation = article.DateCreation;
+            obj.CategoriaId = article.CategoriaId;
             obj.DateCreation = DateTime.UtcNow.ToString();
             _context.Update(obj);
             //_context.SaveChanges();

@@ -1,0 +1,85 @@
+﻿@model BlogCore.Models.Slider
+
+@{
+    ViewData["Title"] = "Editar Slider";
+}
+
+<br />
+<br />
+
+<h3 class="texte-center">Editar Slider</h3>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <!-- Send Id Article Hidden Update-->
+    <input type="hidden" asp-for="Id" />
+    <div class="row px-2 offset-1 border">
+        <div asp-validation-summary="ModelOnly" class="text-danger" />
+        <div class="col-8 mt-4">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label class="col-8">
+                        <label asp-for="Name"></label>
+                    </label>
+                </div>
+
+                <div class="col-8">
+                    <input asp-for="Name" class="form-control border" placeholder="Ingrese el nombre del slider..." />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="form-group row mt-2">
+                <div class="col-4">
+                    <label class="col-8">
+                        <label asp-for="State"></label>
+                    </label>
+                </div>
+                <div class="col-8">
+                    <textarea asp-for="State" class="form-control mt-2 border" placeholder="Ingrese el estado del slider..." ></textarea>
+                    <span asp-validation-for="State" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="form-group row mt-2">
+                <div class="col-4">
+                    <label class="col-8">
+                        <label asp-for="UrlImage"></label>
+                    </label>
+                </div>
+                <div class="col-8">
+                    <input type="file" name="files" id="loadFile" class="form-control border" />
+                </div>
+
+            </div>
+            <div class="form-group row mt-2 m-lg-2">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary form-control" asp-route-id="@Model.Id>
+                        <i class="fa-solid fa-pen-to-square"></i> Actualizar
+                    </button>
+                </div>
+
+                <div class="col">
+                    <a asp-action="Index" class="btn btn-success form-control">Volver a lista</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-4 pt-3">
+            <img src="@Model.UrlImage" width="100%" style="border-radius:5px; border:1px solid #bbb9b9" />
+        </div>
+    </div>
+</form>
+
+@*@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.7.0/tinymce.min.js" integrity="sha512-kGk8SWqEKL++Kd6+uNcBT7B8Lne94LjGEMqPS6rpDpeglJf3xpczBSSCmhSEmXfHTnQ7inRXXxKob4ZuJy3WSQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            menubar: 'file edit format'
+        });
+    </script>
+
+}*@

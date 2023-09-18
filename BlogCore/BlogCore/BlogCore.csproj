@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\articles\" />
+    <Folder Include="wwwroot\Images\sliders\" />
   </ItemGroup>
 
 </Project>

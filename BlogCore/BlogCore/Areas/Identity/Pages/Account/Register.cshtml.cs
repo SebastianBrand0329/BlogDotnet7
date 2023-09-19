@@ -3,6 +3,7 @@
 #nullable disable
 
 using BlogCore.Models;
+using BlogCore.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -23,13 +24,14 @@ namespace BlogCore.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-
+        private readonly RoleManager<IdentityRole> _roleManager;
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -37,6 +39,7 @@ namespace BlogCore.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager; 
         }
 
         /// <summary>
@@ -127,12 +130,49 @@ namespace BlogCore.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                //Saved user personality
+
+                user.Name = Input.Name;
+                user.Address = Input.Address;
+                user.City = Input.City; 
+                user.Country = Input.Country;
+
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
+
+                    //Here Validate if Role exists
+                    if (!await _roleManager.RoleExistsAsync(CNT.Admin))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(CNT.Admin));
+                        await _roleManager.CreateAsync(new IdentityRole(CNT.User));
+                    }
+
+                    //Get Role Selected
+
+                    string role = Request.Form["radUserRole"].ToString();
+
+                    //Validate if Role is Admin and agregate
+
+                    if (role == CNT.Admin)
+                    {
+                        await _userManager.AddToRoleAsync(user, CNT.Admin);
+                    }
+                    else
+                    {
+                        if (role == CNT.User)
+                        {
+                            await _userManager.AddToRoleAsync(user, CNT.User);
+                        }
+                        else
+                        {
+                            await _userManager.AddToRoleAsync(user, CNT.User);
+                        }
+                    }
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -144,8 +184,8 @@ namespace BlogCore.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

@@ -113,6 +113,10 @@ namespace BlogCore.Areas.Identity.Pages.Account
             [Required(ErrorMessage = "El campo {0} es obligatorio")]
             public string Country { get; set; }
 
+            [Display(Name ="Número de Celular")]
+            [Required(ErrorMessage ="El campo {0} es obligatorio")]
+            public string PhoneNumber { get; set; }
+
         }
 
 
@@ -136,6 +140,7 @@ namespace BlogCore.Areas.Identity.Pages.Account
                 user.Address = Input.Address;
                 user.City = Input.City; 
                 user.Country = Input.Country;
+                user.PhoneNumber = Input.PhoneNumber;   
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -175,14 +180,14 @@ namespace BlogCore.Areas.Identity.Pages.Account
 
                     _logger.LogInformation("User created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    //var userId = await _userManager.GetUserIdAsync(user);
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    //var callbackUrl = Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    //    protocol: Request.Scheme);
 
                     //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                     //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");

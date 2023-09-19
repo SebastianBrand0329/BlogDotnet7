@@ -35,7 +35,8 @@
                     </label>
                 </div>
                 <div class="col-8">
-                    <textarea asp-for="State" class="form-control mt-2 border" placeholder="Ingrese el estado del slider..." ></textarea>
+                    <label>Activo</label>
+                    <input asp-for="State"/>
                     <span asp-validation-for="State" class="text-danger"></span>
                 </div>
 

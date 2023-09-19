@@ -15,7 +15,17 @@ function LoadDatatable() {
         "columns": [
             { "data": "id", "width": "5%" }, // Utiliza "Id" en lugar de "id"
             { "data": "name", "width": "30%" }, // Utiliza "Name" en lugar de "name"
-            { "data": "state", "width": "20%" }, // Utiliza "Order" en lugar de "order"
+            {
+                "data": "state",
+                "render": function (actualState) {
+                    if (actualState == true) {
+                        return "Activo"
+                    } else {
+                        return "Inactivo"
+                    }
+                },
+                "width": "20%"
+            }, // Utiliza "Order" en lugar de "order"
             {
                 "data": "id", // Utiliza "Id" en lugar de "id"
                 "render": function (data) {

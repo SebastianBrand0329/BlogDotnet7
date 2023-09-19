@@ -1,4 +1,6 @@
-﻿using BlogCore.Models;
+﻿using BlogCore.AccesoDatos.Data.Repository;
+using BlogCore.Models;
+using BlogCore.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,22 +9,36 @@ namespace BlogCore.Areas.Cliente.Controllers
     [Area("Cliente")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IWorkContainer _workContainer;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IWorkContainer workContainer)
         {
-            _logger = logger;
+            _workContainer = workContainer;
         }
 
         public IActionResult Index()
         {
-            return View();
+            HomeVM homeVM = new()
+            {
+                Sliders = _workContainer.sliderRepository.GetAll(),
+                listArticles = _workContainer.articleRepository.GetAll()
+            };
+
+            //This line is for can know if is Index of client and home page main
+            ViewBag.IsHome = true;
+
+            return View(homeVM);
         }
 
-        public IActionResult Privacy()
+
+        public IActionResult Details(int id)
         {
-            return View();
+            var article = _workContainer.articleRepository.Get(id);
+
+            return View(article);
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

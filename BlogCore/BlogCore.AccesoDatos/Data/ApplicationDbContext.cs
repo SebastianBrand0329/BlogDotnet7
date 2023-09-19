@@ -19,5 +19,7 @@ namespace BlogCore.Data
         
         public DbSet<Slider> Sliders { get; set; }
 
+        public DbSet<ApplicationUser> applicationUsers { get; set; }
+
     }
 }

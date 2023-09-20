@@ -1,4 +1,5 @@
 using BlogCore.AccesoDatos.Data.Repository;
+using BlogCore.AccesoDatos.Seeder;
 using BlogCore.Data;
 using BlogCore.Models;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,9 @@ builder.Services.AddControllersWithViews();
 //Agregate workContainer
 builder.Services.AddScoped<IWorkContainer, WorkContainer>();
 
+//Interface Seeder Data
+builder.Services.AddScoped<ISeeder, Seeder>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,6 +37,9 @@ else
 }
 app.UseStaticFiles();
 
+//Method Sedder Db
+SeedDb();
+
 app.UseRouting();
 
 app.UseAuthorization();
@@ -43,3 +50,13 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+//Funtion Method SeedDb
+void SeedDb()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var initDb = scope.ServiceProvider.GetRequiredService<ISeeder>();
+        initDb.Init();
+    }
+}

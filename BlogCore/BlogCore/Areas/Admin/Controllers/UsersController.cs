@@ -1,10 +1,12 @@
 ﻿using BlogCore.AccesoDatos.Data.Repository;
 using BlogCore.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace BlogCore.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class UsersController : Controller
     {

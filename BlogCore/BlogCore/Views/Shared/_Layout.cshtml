@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using BlogCore.Utilities;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,6 +26,10 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
+                        @if (User.IsInRole(CNT.Admin))
+                        {
+                            
+                        
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Contenidos</a>
                             <div class="dropdown-menu">
@@ -34,6 +39,7 @@
                                 <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Usuarios</a>
                             </div>
                         </li>
+                        }
                     </ul>
 
                 </div>
